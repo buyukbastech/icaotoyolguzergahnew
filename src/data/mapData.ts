@@ -18,6 +18,30 @@ export const tollGates: TollGate[] = [
     customLaneText: "10 Gidiş 10 Geliş",
   },
   {
+    id: "G1-Giris",
+    name: "FENERTEPE G1 (GİRİŞ)",
+    location: "Fenertepe (Giriş)",
+    lat: 41.201500, // Top right relative to G1
+    lng: 28.825200,
+    status: "active",
+    technicalId: "GS-001A-FNT",
+    direction: "Giriş",
+    laneCount: 4,
+    region: "Avrupa Tarafı",
+  },
+  {
+    id: "G1-Cikis",
+    name: "FENERTEPE G1 (ÇIKIŞ)",
+    location: "Fenertepe (Çıkış)",
+    lat: 41.193500, // Bottom left relative to G1
+    lng: 28.822800,
+    status: "active",
+    technicalId: "GS-001B-FNT",
+    direction: "Çıkış",
+    laneCount: 4,
+    region: "Avrupa Tarafı",
+  },
+  {
     id: "G2",
     name: "IŞIKLAR G2",
     location: "Işıklar",
