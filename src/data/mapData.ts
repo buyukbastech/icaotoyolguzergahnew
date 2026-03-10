@@ -26,7 +26,7 @@ export const tollGates: TollGate[] = [
     status: "active",
     technicalId: "GS-001A-FNT",
     direction: "Giriş",
-    laneCount: 4,
+    laneCount: 3,
     region: "Avrupa Tarafı",
   },
   {
@@ -38,7 +38,7 @@ export const tollGates: TollGate[] = [
     status: "active",
     technicalId: "GS-001B-FNT",
     direction: "Çıkış",
-    laneCount: 4,
+    laneCount: 3,
     region: "Avrupa Tarafı",
   },
   {
