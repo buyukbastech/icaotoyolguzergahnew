@@ -21,8 +21,8 @@ export const tollGates: TollGate[] = [
     id: "G1-Giris",
     name: "FENERTEPE G1 (GİRİŞ)",
     location: "Fenertepe (Giriş)",
-    lat: 41.208500, // Moved further north to the indicated entry toll structure
-    lng: 28.823200,
+    lat: 41.201800, // Correctly positioned north of G1
+    lng: 28.825500, // Correctly positioned east of the main highway (on the right-side ramp)
     status: "active",
     technicalId: "GS-001A-FNT",
     direction: "Giriş",
