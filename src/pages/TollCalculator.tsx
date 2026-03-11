@@ -129,7 +129,7 @@ const STATION_KILOMETERS: Record<string, number> = {
     "Fenertepe": 8.677,        // KM 8+677 (SGS Noktası)
     "Çamlık": 1.101,           // KM 1+101
     "Sarıgazi": 5.284,         // KM 5+284
-    "Çekmeköy": 6.011,         // KM 6+011
+    "Çekmeköy": 5.975,         // KM 5+975 (Adjusted for 2.7km distance from İSTOÇ)
     "Kömürlük": 10.351,        // KM 10+351 (G11 Gişe)
     // ── ANA GİŞELER ───────────────────────────────────────────────────────
     "G1": 61.644,  // FNT: Fenertepe
@@ -265,7 +265,8 @@ const TollCalculator = () => {
     const costBreakdown = useMemo(() => {
         if (!result) return [];
         return [
-            { name: "Otoyol Ücreti", value: result.highway, color: "#f59e0b" }
+            { name: "Otoyol Ücreti", value: result.highway, color: "#f59e0b" },
+            { name: "Mesafe (Hacim)", value: result.distance * 10, color: "#10b981" },
         ];
     }, [result]);
 
@@ -434,10 +435,10 @@ const TollCalculator = () => {
                                         </ResponsiveContainer>
                                     </div>
 
-                                    <div className="grid grid-cols-1 gap-5">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div className="glass rounded-xl p-5 border border-glass">
                                             <p className="text-xs font-bold text-foreground mb-4">Araç Sınıfları Karşılaştırması</p>
-                                            <ResponsiveContainer width="100%" height={260}>
+                                            <ResponsiveContainer width="100%" height={200}>
                                                 <BarChart data={comparisonData}>
                                                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.02)" />
                                                     <XAxis dataKey="name" tick={{ fill: "#94a3b8", fontSize: 9 }} />
@@ -445,6 +446,33 @@ const TollCalculator = () => {
                                                     <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)" }} />
                                                     <Bar dataKey="Ücret" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                                                 </BarChart>
+                                            </ResponsiveContainer>
+                                        </div>
+
+                                        <div className="glass rounded-xl p-5 border border-glass">
+                                            <p className="text-xs font-bold text-foreground mb-4 flex items-center gap-2"><Ruler className="w-4 h-4 text-emerald-400" /> Yolculuk Özet Analizi</p>
+                                            <ResponsiveContainer width="100%" height={200}>
+                                                <PieChart>
+                                                    <Pie
+                                                        data={costBreakdown}
+                                                        cx="50%"
+                                                        cy="50%"
+                                                        innerRadius={60}
+                                                        outerRadius={80}
+                                                        paddingAngle={5}
+                                                        dataKey="value"
+                                                    >
+                                                        {costBreakdown.map((entry, index) => (
+                                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                                        ))}
+                                                    </Pie>
+                                                    <Tooltip
+                                                        contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }}
+                                                        itemStyle={{ color: "#fff" }}
+                                                        formatter={(value: number, name: string) => name === "Otoyol Ücreti" ? `₺${value}` : `${(value / 10).toFixed(1)} km`}
+                                                    />
+                                                    <Legend verticalAlign="bottom" height={36} />
+                                                </PieChart>
                                             </ResponsiveContainer>
                                         </div>
                                     </div>
