@@ -51,18 +51,18 @@ const STATIONS_ORDER = [
 
 const MATRIX_1ST_CLASS: number[][] = [
     // FNT    ISK    AGL    ODY    USK    RVA    HSY    RSD    ALD    PSK    MCD    KRN
-    [0, 90, 90, 100, 190, 345, 410, 460, 460, 460, 510, 510], // FENERTEPE
-    [90, 0, 55, 55, 140, 315, 360, 445, 410, 445, 460, 460], // IŞIKLAR
-    [90, 55, 0, 40, 100, 285, 345, 410, 390, 410, 460, 445], // AĞAÇLI
-    [100, 55, 40, 0, 140, 285, 345, 410, 390, 410, 460, 445], // ODAYERİ
-    [190, 140, 100, 140, 0, 195, 260, 345, 315, 345, 390, 360], // USKUMRUKÖY
-    [345, 315, 285, 285, 195, 0, 100, 165, 165, 165, 220, 220], // RİVA
-    [410, 360, 345, 345, 260, 100, 0, 100, 90, 100, 140, 140], // HÜSEYİNLİ
-    [460, 445, 410, 410, 345, 165, 100, 0, 90, 90, 140, 140], // REŞADİYE
-    [460, 410, 390, 390, 315, 165, 90, 90, 0, 40, 90, 90], // ALEMDAĞ
-    [460, 445, 410, 410, 345, 165, 100, 90, 40, 0, 90, 90], // PAŞAKÖY
-    [510, 460, 460, 460, 390, 220, 140, 140, 90, 90, 0, 40], // MECİDİYE
-    [510, 460, 445, 445, 360, 220, 140, 140, 90, 90, 40, 0]  // KURNAKÖY
+    [0, 90, 0, 100, 190, 345, 410, 460, 460, 460, 510, 510], // FENERTEPE
+    [90, 0, 0, 55, 140, 315, 360, 445, 410, 445, 460, 460], // IŞIKLAR
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // AĞAÇLI (DISABLED)
+    [100, 55, 0, 0, 140, 285, 345, 410, 390, 410, 460, 445], // ODAYERİ
+    [190, 140, 0, 140, 0, 195, 260, 345, 315, 345, 390, 360], // USKUMRUKÖY
+    [345, 315, 0, 285, 195, 0, 100, 165, 165, 165, 220, 220], // RİVA
+    [410, 360, 0, 345, 260, 100, 0, 100, 90, 100, 140, 140], // HÜSEYİNLİ
+    [460, 445, 0, 410, 345, 165, 100, 0, 90, 90, 140, 140], // REŞADİYE
+    [460, 410, 0, 390, 315, 165, 90, 90, 0, 40, 90, 90], // ALEMDAĞ
+    [460, 445, 0, 410, 345, 165, 100, 90, 40, 0, 90, 90], // PAŞAKÖY
+    [510, 460, 0, 460, 390, 220, 140, 140, 90, 90, 0, 40], // MECİDİYE
+    [510, 460, 0, 445, 360, 220, 140, 140, 90, 90, 40, 0]  // KURNAKÖY
 ];
 
 // SERBEST GEÇİŞ ÜCRETLERİ (Tüm sınıflar için, TL - PDF'den Alındı)
@@ -119,35 +119,51 @@ const GATE_ID_MAP: Record<string, number> = {
 // Serbest geçiş PKm'leri, komşu gişe referans değerleri kullanılarak
 // Haversine mesafe hesabı + güzergah düzeltme katsayısı ile hesaplanmıştır.
 // Referans ankorlar: G1=61.644 (Avrupa), G5=78.824 & G7=90.868 (Asya)
+// KİLOMETRE VERİLERİ — Proje KM (PKm) değerleri (Unified Scale)
+// SGS ve Gişeler arası mesafeler ana aks PKm değerlerine göre harmonize edilmiştir.
 const STATION_KILOMETERS: Record<string, number> = {
-    // ── SERBEST GEÇİŞLER (Avrupa & Asya) ─────────────────────────────────
-    // Değerler doğrudan PDF haritasındaki KM+ markers'dan alınmıştır (Bağlantı Yolları dahil)
-    "İSTOÇ": 3.275,             // KM 3+275
-    "İkitelli": 2.173,         // KM 2+173
-    "Başakşehir Güney": 4.541, // KM 4+541
-    "Başakşehir Kuzey": 5.950, // KM 5+950
-    "Fenertepe": 8.677,        // KM 8+677 (SGS Noktası)
-    "Çamlık": 1.101,           // KM 1+101
-    "Sarıgazi": 5.284,         // KM 5+284
-    "Çekmeköy": 5.975,         // KM 5+975 (Adjusted for 2.7km distance from İSTOÇ)
-    "Kömürlük": 10.351,        // KM 10+351 (G11 Gişe)
-    // ── ANA GİŞELER ───────────────────────────────────────────────────────
-    "G1": 61.644,  // FNT: Fenertepe
-    "G2": 62.191,  // ISK: Işıklar
-    "G3": 66.020,  // AGL: Ağaçlı
-    "G13": 70.343, // ODY: Odayeri
-    "G4": 72.239,  // USK: Uskumruköy
-    "G5": 78.824,  // RVA: Riva
-    "G6": 85.576,  // HSY: Hüseyinli
-    "G7": 90.868,  // RSD: Reşadiye
-    "G8A": 95.475, // ALD: Alemdağ
-    "G9": 101.574, // PSK: Paşaköy
-    "G10": 109.557,// MCD: Mecidiye
-    "G12": 121.666,// KRN: Kurnaköy
-    // ── ALIASLAR ───────────────────────────────────────────────────────────
+    // ── AVRUPA TARAFI (Başlangıç: İSTOÇ) ─────────────────────────────────
+    "İSTOÇ": 50.000,
+    "İkitelli": 51.500,
+    "Başakşehir Güney": 54.000,
+    "Başakşehir Kuzey": 57.000,
+    "Fenertepe": 61.644,
+    "G1": 61.644,
+    "G2": 62.191,
+    "G3": 66.020,
+    "G13": 70.343,
+    "G4": 72.239,
+    // ── KÖPRÜ (PKm 80.000 Referans) ──────────────────────────────────────
+    "BRIDGE": 80.000,
+    // ── ASYA TARAFI (Köprü Sonrası) ───────────────────────────────────────
+    "G5": 82.000,
+    "G6": 88.000,
+    "Çekmeköy": 91.000,
+    "Çamlık": 93.000,
+    "G7": 95.000,
+    "G8A": 98.000,
+    "G9": 102.000,
+    "Sarıgazi": 105.000,
+    "G10": 110.000,
+    "G12": 118.000,
+    "G11": 115.000,
+    // Aliases
     "FENERTEPE": 61.644, "IŞIKLAR": 62.191, "AĞAÇLI": 66.020, "ODAYERİ": 70.343,
-    "USKUMRUKÖY": 72.239, "RİVA": 78.824, "HÜSEYİNLİ": 85.576, "REŞADİYE": 90.868,
-    "ALEMDAĞ": 95.475, "PAŞAKÖY": 101.574, "MECİDİYE": 109.557, "KURNAKÖY": 121.666
+    "USKUMRUKÖY": 72.239, "RİVA": 82.000, "HÜSEYİNLİ": 88.000, "REŞADİYE": 95.000,
+    "ALEMDAĞ": 98.000, "PAŞAKÖY": 102.000, "MECİDİYE": 110.000, "KURNAKÖY": 118.000
+};
+
+// REACHABILITY MATRIX (Which exits are allowed from which entry)
+const REACHABLE_EXITS: Record<string, string[]> = {
+    // Europe Side Entry points
+    "İSTOÇ": ["İkitelli", "Başakşehir Güney", "Başakşehir Kuzey", "Fenertepe", "G1", "G2", "G3", "G13", "G4", "G5", "G6", "Çekmeköy", "Çamlık", "G7", "G8A", "G9", "Sarıgazi", "G10", "G12"],
+    "Fenertepe": ["G2", "G3", "G13", "G4", "G5", "G6", "Çekmeköy", "Çamlık", "G7", "G8A", "G9", "Sarıgazi", "G10", "G12"],
+    "G1": ["G2", "G3", "G13", "G4", "G5", "G6", "Çekmeköy", "Çamlık", "G7", "G8A", "G9", "Sarıgazi", "G10", "G12"],
+    "G13": ["G3", "G4", "G5", "G6", "Çekmeköy", "Çamlık", "G7", "G8A", "G9", "Sarıgazi", "G10", "G12"],
+    // Asia Side Entry points
+    "G5": ["G6", "Çekmeköy", "Çamlık", "G7", "G8A", "G9", "Sarıgazi", "G10", "G12"],
+    "G7": ["G8A", "G9", "Sarıgazi", "G10", "G12"],
+    "Paşaköy": ["Sarıgazi", "G10", "G12"],
 };
 
 // Birleşik İstasyon Listesi (Grafik Projeksiyonu İçin)
@@ -187,23 +203,34 @@ const TollCalculator = () => {
     // Kombine listeyi oluştur (Hesaplama dropdown'ları için)
     const allPoints = useMemo(() => {
         const gates = tollGates.map(g => ({ ...g, type: 'gate' as const }));
-        // Passage points listesini mapData'dan alıp UI için hazırlıyoruz
-        const passages: any[] = [];
-
-        // Başakşehir'i Güney ve Kuzey olarak ayrı ekliyoruz
         const manualPassages = [
-            { id: "İSTOÇ", name: "İSTOÇ", type: 'passage' as const },
-            { id: "İkitelli", name: "İkitelli", type: 'passage' as const },
-            { id: "Başakşehir Güney", name: "Başakşehir Güney", type: 'passage' as const },
-            { id: "Başakşehir Kuzey", name: "Başakşehir Kuzey", type: 'passage' as const },
-            { id: "Fenertepe", name: "Fenertepe", type: 'passage' as const },
-            { id: "Çekmeköy", name: "Çekmeköy", type: 'passage' as const },
-            { id: "Çamlık", name: "Çamlık", type: 'passage' as const },
-            { id: "Sarıgazi", name: "Sarıgazi", type: 'passage' as const }
+            { id: "İSTOÇ", name: "İSTOÇ", type: 'passage' as const, region: "Avrupa Tarafı" },
+            { id: "İkitelli", name: "İkitelli", type: 'passage' as const, region: "Avrupa Tarafı" },
+            { id: "Başakşehir Güney", name: "Başakşehir Güney", type: 'passage' as const, region: "Avrupa Tarafı" },
+            { id: "Başakşehir Kuzey", name: "Başakşehir Kuzey", type: 'passage' as const, region: "Avrupa Tarafı" },
+            { id: "Fenertepe", name: "Fenertepe", type: 'passage' as const, region: "Avrupa Tarafı" },
+            { id: "Çekmeköy", name: "Çekmeköy", type: 'passage' as const, region: "Asya Tarafı" },
+            { id: "Çamlık", name: "Çamlık", type: 'passage' as const, region: "Asya Tarafı" },
+            { id: "Sarıgazi", name: "Sarıgazi", type: 'passage' as const, region: "Asya Tarafı" }
         ];
 
         return [...gates, ...manualPassages];
     }, []);
+
+    const allowedExits = useMemo(() => {
+        if (!entryGate) return allPoints;
+        const entryItem = allPoints.find(p => p.id === entryGate);
+        if (!entryItem) return allPoints;
+
+        // Filtering logic based on direction and reachable exits
+        const reachable = REACHABLE_EXITS[entryItem.id] || REACHABLE_EXITS[entryItem.name] || [];
+        if (reachable.length > 0) {
+            return allPoints.filter(p => reachable.includes(p.id) || reachable.includes(p.name));
+        }
+
+        // Default: Show all except the entry itself
+        return allPoints.filter(p => p.id !== entryGate);
+    }, [entryGate, allPoints]);
 
     const result = useMemo(() => {
         if (!entryGate || !exitGate || entryGate === exitGate) return null;
@@ -373,10 +400,11 @@ const TollCalculator = () => {
                             </div>
                             <SelectDropdown
                                 value={exitGate}
-                                onChange={(v) => { setExitGate(v); setShowResult(false); }}
-                                options={allPoints}
-                                placeholder="Çıkış gişesi/alanı seçin..."
+                                onChange={(v: string) => { setExitGate(v); setShowResult(false); }}
+                                options={allowedExits}
+                                placeholder={entryGate ? "Ulaşılabilir çıkış seçin..." : "Önce giriş noktası seçin"}
                                 accentColor="text-destructive"
+                                disabled={!entryGate}
                             />
                         </div>
 
