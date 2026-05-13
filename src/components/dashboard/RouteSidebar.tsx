@@ -12,8 +12,10 @@ import {
   ToggleRight,
   List,
   Search,
-  Calculator
+  Calculator,
+  GitBranch
 } from "lucide-react";
+
 import { passagePoints, tollGates } from "@/data/mapData";
 
 interface RouteSidebarProps {
@@ -243,7 +245,29 @@ const RouteSidebar = ({
             </div>
           </>
         )}
+
+        {/* EXTRA: Giriş-Çıkış Analizi (Connectivity Analysis) */}
+        {!searchQuery && (
+          <div className="pt-2 border-t border-glass/30 mt-2">
+            <button
+              onClick={() => navigate("/connectivity")}
+              className="w-full text-left p-3 rounded-lg transition-all flex items-center justify-between hover:bg-secondary/50 border border-transparent group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-500/10 rounded border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors">
+                  <GitBranch className="w-4 h-4 text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">Giriş-Çıkış Analizi</p>
+                  <p className="text-[10px] text-muted-foreground">Nokta bazlı bağlantı analizi</p>
+                </div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
+        )}
       </div>
+
 
       {/* Bottom Controls */}
       <div className="p-4 border-t border-glass space-y-3">

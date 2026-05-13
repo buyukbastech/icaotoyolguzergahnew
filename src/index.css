@@ -132,7 +132,10 @@
 
 /* Leaflet overrides for dark theme */
 .leaflet-container {
-  background: hsl(225, 25%, 4%) !important;
+  background: hsl(225, 25% , 4%) !important;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 .leaflet-control-zoom a {
   background: hsl(225, 20%, 12%) !important;

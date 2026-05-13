@@ -68,14 +68,14 @@ const MATRIX_1ST_CLASS: number[][] = [
 // SERBEST GEÇİŞ ÜCRETLERİ (Tüm sınıflar için, TL - PDF'den Alındı)
 // Format: [1. Sınıf, 2. Sınıf, 3. Sınıf, 4. Sınıf, 5. Sınıf, 6. Sınıf]
 const PASSAGE_FEES_BY_CLASS: Record<string, number[]> = {
-    "İSTOÇ": [14.00, 22.00, 25.00, 35.00, 41.50, 10.00],
-    "İkitelli": [14.00, 25.00, 26.50, 36.50, 47.50, 10.00],
-    "Başakşehir Güney": [16.50, 26.50, 35.00, 41.50, 53.50, 14.00],
-    "Başakşehir Kuzey": [22.00, 35.00, 41.00, 53.50, 67.00, 16.50],
-    "Fenertepe": [35.00, 51.00, 61.50, 83.00, 103.00, 25.00],
-    "Çekmeköy": [16.50, 26.50, 29.50, 41.00, 51.00, 10.00],
-    "Çamlık": [41.50, 68.00, 83.00, 108.50, 137.50, 29.50],
-    "Sarıgazi": [14.00, 25.00, 26.50, 35.00, 41.50, 10.00]
+    "İSTOÇ": [14.00, 22.50, 44.00, 116.00, 146.00, 10.00],
+    "İkitelli": [14.00, 22.50, 44.00, 116.00, 146.00, 10.00],
+    "Başakşehir Güney": [16.50, 26.50, 52.00, 137.00, 172.00, 11.50],
+    "Başakşehir Kuzey": [21.00, 34.00, 66.00, 174.00, 218.00, 15.00],
+    "Fenertepe": [36.00, 58.00, 112.00, 298.00, 374.00, 25.00],
+    "Çekmeköy": [16.50, 26.50, 52.00, 137.00, 172.00, 11.50],
+    "Çamlık": [41.50, 66.50, 130.50, 345.00, 431.00, 29.00],
+    "Sarıgazi": [14.00, 22.50, 44.00, 116.00, 146.00, 10.00]
 };
 
 // GİŞE MATRİSİ (Sadece 1. Sınıf matrisi tutuyoruz, ancak diğer sınıflar için PDF'de 1. Sınıf ücretinin 
@@ -83,14 +83,14 @@ const PASSAGE_FEES_BY_CLASS: Record<string, number[]> = {
 // Hassasiyet için PDF tablosundaki 2. sınıfları da mocklayarak düzeltebiliriz.)
 // Ancak kullanıcı "Serbest Geçişlerde" dediği için asıl odağımız oradaki tablo.
 
-// KÖPRÜ ÜCRETLERİ (YSS Köprüsü)
+// KÖPRÜ ÜCRETLERİ (YSS Köprüsü - 2026 1. YARIYIL PAKET)
 const BRIDGE_FEES: Record<number, number> = {
-    1: 95.00,
-    2: 125.00,
-    3: 235.00,
-    4: 595.00,
-    5: 740.00,
-    6: 65.00
+    1: 344.00, // Fenertepe-Riva 380 TL denklemi (380 - 36 [S5] = 344)
+    2: 440.00,
+    3: 780.00,
+    4: 1980.00,
+    5: 2450.00,
+    6: 220.00
 };
 
 // Araç Sınıfı Çarpanları (Tahmini, ancak PDF'deki spesifik değerlere yakın)
@@ -112,7 +112,18 @@ const TRAFFIC_DENSITY_DATA = [
 ];
 
 const GATE_ID_MAP: Record<string, number> = {
-    G1: 0, G2: 1, G3: 2, G13: 3, G4: 4, G5: 5, G6: 6, G7: 7, G8A: 8, G8B: 8, G9: 9, G10: 10, G12: 11
+    G1: 0, "G1-Giris": 0, "G1-Cikis": 0,
+    G2: 1,
+    G3: 2,
+    G13: 3,
+    G4: 4,
+    G5: 5,
+    G6: 6,
+    G7: 7,
+    G8A: 8, G8B: 8,
+    G9: 9,
+    G10: 10,
+    G12: 11
 };
 
 // KİLOMETRE VERİLERİ — Proje KM (PKm) değerleri
@@ -122,35 +133,35 @@ const GATE_ID_MAP: Record<string, number> = {
 // KİLOMETRE VERİLERİ — Proje KM (PKm) değerleri (Unified Scale)
 // SGS ve Gişeler arası mesafeler ana aks PKm değerlerine göre harmonize edilmiştir.
 const STATION_KILOMETERS: Record<string, number> = {
-    // ── AVRUPA TARAFI (Başlangıç: İSTOÇ) ─────────────────────────────────
-    "İSTOÇ": 50.000,
-    "İkitelli": 51.500,
-    "Başakşehir Güney": 54.000,
-    "Başakşehir Kuzey": 57.000,
-    "Fenertepe": 61.644,
-    "G1": 61.644,
-    "G2": 62.191,
-    "G3": 66.020,
-    "G13": 70.343,
-    "G4": 72.239,
-    // ── KÖPRÜ (PKm 80.000 Referans) ──────────────────────────────────────
+    // ── AVRUPA TARAFI ─────────────────────────────────
+    "İSTOÇ": 62.400, "S1A": 62.400, "S1B": 62.400,
+    "İkitelli": 63.600, "S2A": 63.600,
+    "Başakşehir Güney": 64.800, "S3A": 64.800, "S3B": 64.800,
+    "Başakşehir Kuzey": 66.900, "S4A": 66.900, "S4B": 66.900,
+    "Fenertepe": 71.700, "S5A": 71.700, "S5B": 71.700,
+    "G1": 71.700, "G1-Giris": 71.800, "G1-Cikis": 71.600,
+    "G2": 73.500,
+    "G3": 74.800,
+    "G13": 75.700,
+    "G4": 77.200,
+    // ── KÖPRÜ ──────────────────────────────────────
     "BRIDGE": 80.000,
-    // ── ASYA TARAFI (Köprü Sonrası) ───────────────────────────────────────
-    "G5": 82.000,
+    // ── ASYA TARAFI ──────────────────────────────────
+    "G5": 82.700,
     "G6": 88.000,
-    "Çekmeköy": 91.000,
-    "Çamlık": 93.000,
-    "G7": 95.000,
-    "G8A": 98.000,
-    "G9": 102.000,
-    "Sarıgazi": 105.000,
-    "G10": 110.000,
-    "G12": 118.000,
-    "G11": 115.000,
+    "Çekmeköy": 91.000, "S6A": 91.000, "S6B": 91.000,
+    "Çamlık": 93.000, "S7A": 93.000, "S7B": 93.000,
+    "G7": 93.800,
+    "G8A": 96.000, "G8B": 96.200,
+    "G9": 98.300,
+    "Sarıgazi": 105.000, "S8A": 105.000, "S8B": 105.000,
+    "G10": 106.700,
+    "G12": 109.500,
+    "G11": 108.000,
     // Aliases
-    "FENERTEPE": 61.644, "IŞIKLAR": 62.191, "AĞAÇLI": 66.020, "ODAYERİ": 70.343,
-    "USKUMRUKÖY": 72.239, "RİVA": 82.000, "HÜSEYİNLİ": 88.000, "REŞADİYE": 95.000,
-    "ALEMDAĞ": 98.000, "PAŞAKÖY": 102.000, "MECİDİYE": 110.000, "KURNAKÖY": 118.000
+    "FENERTEPE": 71.700, "IŞIKLAR": 73.500, "AĞAÇLI": 74.800, "ODAYERİ": 75.700,
+    "USKUMRUKÖY": 77.200, "RİVA": 82.700, "HÜSEYİNLİ": 88.000, "REŞADİYE": 93.800,
+    "ALEMDAĞ": 96.000, "PAŞAKÖY": 98.300, "MECİDİYE": 106.700, "KURNAKÖY": 109.500
 };
 
 // REACHABILITY MATRIX (Which exits are allowed from which entry)
@@ -203,18 +214,8 @@ const TollCalculator = () => {
     // Kombine listeyi oluştur (Hesaplama dropdown'ları için)
     const allPoints = useMemo(() => {
         const gates = tollGates.map(g => ({ ...g, type: 'gate' as const }));
-        const manualPassages = [
-            { id: "İSTOÇ", name: "İSTOÇ", type: 'passage' as const, region: "Avrupa Tarafı" },
-            { id: "İkitelli", name: "İkitelli", type: 'passage' as const, region: "Avrupa Tarafı" },
-            { id: "Başakşehir Güney", name: "Başakşehir Güney", type: 'passage' as const, region: "Avrupa Tarafı" },
-            { id: "Başakşehir Kuzey", name: "Başakşehir Kuzey", type: 'passage' as const, region: "Avrupa Tarafı" },
-            { id: "Fenertepe", name: "Fenertepe", type: 'passage' as const, region: "Avrupa Tarafı" },
-            { id: "Çekmeköy", name: "Çekmeköy", type: 'passage' as const, region: "Asya Tarafı" },
-            { id: "Çamlık", name: "Çamlık", type: 'passage' as const, region: "Asya Tarafı" },
-            { id: "Sarıgazi", name: "Sarıgazi", type: 'passage' as const, region: "Asya Tarafı" }
-        ];
-
-        return [...gates, ...manualPassages];
+        const passages = passagePoints.map(p => ({ ...p, type: 'passage' as const }));
+        return [...gates, ...passages];
     }, []);
 
     const allowedExits = useMemo(() => {
@@ -223,132 +224,146 @@ const TollCalculator = () => {
         if (!entryItem) return allPoints;
 
         // Filtering logic based on direction and reachable exits
-        const reachable = REACHABLE_EXITS[entryItem.id] || REACHABLE_EXITS[entryItem.name] || [];
+        const reachable = REACHABLE_EXITS[entryItem.id] || 
+                         (entryItem.name ? REACHABLE_EXITS[entryItem.name] : []) || 
+                         (('group' in entryItem) ? REACHABLE_EXITS[entryItem.group as string] : []) || [];
+
         if (reachable.length > 0) {
-            return allPoints.filter(p => reachable.includes(p.id) || reachable.includes(p.name));
+            return allPoints.filter(p => 
+                reachable.includes(p.id) || 
+                reachable.includes(p.name) || 
+                (('group' in p) && reachable.includes((p as any).group))
+            );
         }
 
         // Default: Show all except the entry itself
         return allPoints.filter(p => p.id !== entryGate);
     }, [entryGate, allPoints]);
 
-    const result = useMemo(() => {
-        if (!entryGate || !exitGate || entryGate === exitGate) return null;
+    // ─── UNIFIED CALCULATION ENGINE ──────────────────────────────────────────
+    const calculateTollValue = (
+        entryId: string,
+        exitId: string,
+        vClass: number,
+        pointsList: any[]
+    ) => {
+        if (!entryId || !exitId || entryId === exitId) return null;
 
-        const entryItem = allPoints.find(p => p.id === entryGate);
-        const exitItem = allPoints.find(p => p.id === exitGate);
+        const entryItem = pointsList.find(p => p.id === entryId);
+        const exitItem = pointsList.find(p => p.id === exitId);
         if (!entryItem || !exitItem) return null;
 
-        let highwayFee = 0;
-        const classIdx = vehicleClass - 1;
+        const km1 = STATION_KILOMETERS[entryItem.id] || STATION_KILOMETERS[entryItem.name] || 0;
+        const km2 = STATION_KILOMETERS[exitItem.id] || STATION_KILOMETERS[exitItem.name] || 0;
+        const minKM = Math.min(km1, km2);
+        const maxKM = Math.max(km1, km2);
+        const isEastbound = km2 > km1; // Ankara Yönü: km artar
 
-        // 1. Kapalı Sistem (Gişe -> Gişe)
-        if (entryItem.type === 'gate' && exitItem.type === 'gate') {
-            const idx1 = GATE_ID_MAP[entryItem.id];
-            const idx2 = GATE_ID_MAP[exitItem.id];
-            const baseFee = MATRIX_1ST_CLASS[idx1][idx2];
+        const classIdx = vClass - 1;
+        const classMultiplier = VEHICLE_CLASSES.find(c => c.id === vClass)?.multiplier || 1;
 
-            // Gişe matrisi için sınıf bazlı PDF verisi (Mock hassasiyet)
-            // PDF'de gişe matrisi sadece 1. sınıf olarak basılmış ama diğer sınıflar çarpanlarla hesaplanıyor
-            const classMultiplier = VEHICLE_CLASSES.find(c => c.id === vehicleClass)?.multiplier || 1;
-            highwayFee = baseFee * classMultiplier;
+        // 1. Serbest Geçiş (Passage) Points - Yön Duyarlı (A/B)
+        let sgsFee = 0;
+        passagePoints.forEach(p => {
+            const pKM = STATION_KILOMETERS[p.id] || STATION_KILOMETERS[p.group] || STATION_KILOMETERS[p.name];
+            // ICA Resmî hesaplamasında çıkış noktasındaki sensör de dahil edilir (Inclusive)
+            if (pKM && pKM >= minKM && pKM <= maxKM) {
+                // Yön kontrolü
+                const isCorrectDirection = isEastbound ? p.id.endsWith('A') : p.id.endsWith('B');
+                const isSingleDirection = !passagePoints.some(other => other.group === p.group && other.id !== p.id);
+
+                if (isCorrectDirection || isSingleDirection) {
+                    const rates = PASSAGE_FEES_BY_CLASS[p.group] || PASSAGE_FEES_BY_CLASS[p.name] || [0, 0, 0, 0, 0, 0];
+                    sgsFee += rates[classIdx];
+                }
+            }
+        });
+
+        // 2. Kapalı Sistem (Gate) Matrix
+        const gatesInRange = tollGates.filter(p =>
+            (STATION_KILOMETERS[p.id] || STATION_KILOMETERS[p.name]) >= minKM &&
+            (STATION_KILOMETERS[p.id] || STATION_KILOMETERS[p.name]) <= maxKM &&
+            p.status !== 'maintenance'
+        );
+
+        let gateFee = 0;
+        if (gatesInRange.length >= 2) {
+            const sortedGates = [...gatesInRange].sort((a, b) =>
+                (STATION_KILOMETERS[a.id] || 0) - (STATION_KILOMETERS[b.id] || 0)
+            );
+            const g1 = isEastbound ? sortedGates[0] : sortedGates[sortedGates.length - 1];
+            const g2 = isEastbound ? sortedGates[sortedGates.length - 1] : sortedGates[0];
+
+            const idx1 = GATE_ID_MAP[g1.id] ?? (('location' in g1) ? GATE_ID_MAP[g1.location] : undefined);
+            const idx2 = GATE_ID_MAP[g2.id] ?? (('location' in g2) ? GATE_ID_MAP[g2.location] : undefined);
+
+            if (idx1 !== undefined && idx2 !== undefined) {
+                gateFee = MATRIX_1ST_CLASS[idx1][idx2] * classMultiplier;
+            }
         }
-        // 2. Serbest Geçiş Durumları
-        else {
-            // PDF'deki Serbest Geçiş Sistemi Tablosu'ndan direkt değerleri alıyoruz
-            const entryRates = PASSAGE_FEES_BY_CLASS[entryItem.name] || [0, 0, 0, 0, 0, 0];
-            const exitRates = PASSAGE_FEES_BY_CLASS[exitItem.name] || [0, 0, 0, 0, 0, 0];
 
-            const entryFee = entryItem.type === 'passage' ? entryRates[classIdx] : 0;
-            const exitFee = exitItem.type === 'passage' ? exitRates[classIdx] : 0;
+        const total = sgsFee + gateFee;
 
-            highwayFee = entryFee + exitFee;
-        }
+        // Bridge Detection
+        const crossesBridge = minKM < 80 && maxKM > 80;
+        const bridgePrice = crossesBridge ? (BRIDGE_FEES[vClass] || 0) : 0;
 
-        // Mesafe ve Zaman Hesaplama
-        const kmStart = STATION_KILOMETERS[entryItem.id] || STATION_KILOMETERS[entryItem.name] || 0;
-        const kmEnd = STATION_KILOMETERS[exitItem.id] || STATION_KILOMETERS[exitItem.name] || 0;
-        const distance = Math.abs(kmEnd - kmStart);
-
-        // Karbon Salınımı Tahmini (g/km bazlı CO2 salınımı)
-        const emissionRates: Record<number, number> = {
-            1: 120, // 1. Sınıf: 120g/km
-            2: 180, // 2. Sınıf: 180g/km
-            3: 250, // 3. Sınıf: 250g/km
-            4: 450, // 4. Sınıf: 450g/km
-            5: 750, // 5. Sınıf: 750g/km
-            6: 60,  // 6. Sınıf: 60g/km
-        };
-        const co2Kg = ((distance * (emissionRates[vehicleClass] || 120)) / 1000).toFixed(1);
-
-        // Zaman tahmini (Ortalama 100 km/h)
+        // Distance & Time
+        const distance = Math.abs(km2 - km1);
         const timeMinutes = Math.round((distance / 100) * 60 + 2);
 
-        const total = Math.round(highwayFee);
+        // CO2
+        const emissionRates: Record<number, number> = { 1: 120, 2: 180, 3: 250, 4: 450, 5: 750, 6: 60 };
+        const co2Kg = ((distance * (emissionRates[vClass] || 120)) / 1000).toFixed(1);
 
-        return { total, highway: total, bridge: 0, co2Kg, distance, timeMinutes };
+        return {
+            total,
+            highway: total - bridgePrice,
+            bridge: bridgePrice,
+            distance,
+            timeMinutes,
+            co2Kg,
+            direction: isEastbound ? "Ankara İstikameti" : "Edirne İstikameti"
+        };
+    };
+
+    const result = useMemo(() => {
+        return calculateTollValue(entryGate, exitGate, vehicleClass, allPoints);
     }, [entryGate, exitGate, vehicleClass, allPoints]);
 
     const costBreakdown = useMemo(() => {
         if (!result) return [];
-        return [
-            { name: "Otoyol Ücreti", value: result.highway, color: "#f59e0b" },
-            { name: "Mesafe (Hacim)", value: result.distance * 10, color: "#10b981" },
+        const data = [
+            { name: "Otoyol", value: result.highway, color: "#f59e0b" },
         ];
+        if (result.bridge > 0) {
+            data.push({ name: "Köprü", value: result.bridge, color: "#3b82f6" });
+        }
+        return data;
     }, [result]);
 
     const comparisonData = useMemo(() => {
         if (!entryGate || !exitGate) return [];
-
-        return VEHICLE_CLASSES.map((cls, idx) => {
-            let fee = 0;
-            const entryItem = allPoints.find(p => p.id === entryGate);
-            const exitItem = allPoints.find(p => p.id === exitGate);
-            if (!entryItem || !exitItem) return { name: cls.label, Ücret: 0 };
-
-            if (entryItem.type === 'gate' && exitItem.type === 'gate') {
-                const idx1 = GATE_ID_MAP[entryItem.id];
-                const idx2 = GATE_ID_MAP[exitItem.id];
-                fee = MATRIX_1ST_CLASS[idx1][idx2] * cls.multiplier;
-            } else {
-                const r1 = PASSAGE_FEES_BY_CLASS[entryItem.name] || [0, 0, 0, 0, 0, 0];
-                const r2 = PASSAGE_FEES_BY_CLASS[exitItem.name] || [0, 0, 0, 0, 0, 0];
-                fee = (entryItem.type === 'passage' ? r1[idx] : 0) + (exitItem.type === 'passage' ? r2[idx] : 0);
-            }
-            return { name: cls.label, Ücret: Math.round(fee) };
+        return VEHICLE_CLASSES.map((cls) => {
+            const res = calculateTollValue(entryGate, exitGate, cls.id, allPoints);
+            return { name: cls.label, Ücret: res?.total || 0 };
         });
     }, [entryGate, exitGate, allPoints]);
 
     const routeProjection = useMemo(() => {
         if (!entryGate) return [];
-
-        const entryItem = allPoints.find(p => p.id === entryGate);
-        if (!entryItem) return [];
-
-        return UNIFIED_STATIONS.map((station) => {
-            let fee = 0;
-            const classIdx = vehicleClass - 1;
-            const classMultiplier = VEHICLE_CLASSES.find(c => c.id === vehicleClass)?.multiplier || 1;
-
-            if (entryItem.type === 'gate' && station.type === 'gate') {
-                const idx1 = GATE_ID_MAP[entryItem.id];
-                const idx2 = GATE_ID_MAP[station.id];
-                fee = MATRIX_1ST_CLASS[idx1][idx2] * classMultiplier;
-            } else if (entryItem.type === 'passage' && station.type === 'passage') {
-                const r1 = PASSAGE_FEES_BY_CLASS[entryItem.name] || [0, 0, 0, 0, 0, 0];
-                const r2 = PASSAGE_FEES_BY_CLASS[station.name] || [0, 0, 0, 0, 0, 0];
-                fee = r1[classIdx] + r2[classIdx];
-            } else {
-                // Mixed case: Passage point cost
-                const rates = PASSAGE_FEES_BY_CLASS[station.name] || [0, 0, 0, 0, 0, 0];
-                fee = station.type === 'passage' ? rates[classIdx] : 0;
-            }
-
-            return {
-                name: station.name,
-                Ücret: Math.round(fee)
-            };
-        });
+        return UNIFIED_STATIONS
+            .filter(s => {
+                const gateItem = tollGates.find(g => g.id === s.id);
+                return !gateItem || gateItem.status !== 'maintenance';
+            })
+            .map((station) => {
+                const res = calculateTollValue(entryGate, station.id, vehicleClass, allPoints);
+                return {
+                    name: station.name,
+                    Ücret: res?.total || 0
+                };
+            });
     }, [entryGate, vehicleClass, allPoints]);
 
     return (
@@ -446,8 +461,14 @@ const TollCalculator = () => {
                             {showResult && result ? (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-5">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <SummaryCard label="Otoyol Ücreti" value={`₺${result.highway.toLocaleString('tr-TR')}`} color="text-amber-400" icon={<Zap className="w-4 h-4" />} bold />
-                                        <SummaryCard label="Mesafe" value={`${result.distance.toFixed(1)} km`} color="text-emerald-400" icon={<Ruler className="w-4 h-4" />} />
+                                        <SummaryCard 
+                                            label="Toplam Ücret" 
+                                            value={`₺${result.total.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} 
+                                            color="text-amber-400" 
+                                            icon={<Zap className="w-4 h-4" />} 
+                                            bold 
+                                        />
+                                        <SummaryCard label="İstikamet" value={result.direction} color="text-cyan-400" icon={<TrendingUp className="w-4 h-4" />} />
                                     </div>
 
                                     <div className="glass rounded-xl p-5 border border-glass">
@@ -463,7 +484,7 @@ const TollCalculator = () => {
                                         </ResponsiveContainer>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div className="grid grid-cols-1 gap-5">
                                         <div className="glass rounded-xl p-5 border border-glass">
                                             <p className="text-xs font-bold text-foreground mb-4">Araç Sınıfları Karşılaştırması</p>
                                             <ResponsiveContainer width="100%" height={200}>
@@ -474,33 +495,6 @@ const TollCalculator = () => {
                                                     <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)" }} />
                                                     <Bar dataKey="Ücret" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                                                 </BarChart>
-                                            </ResponsiveContainer>
-                                        </div>
-
-                                        <div className="glass rounded-xl p-5 border border-glass">
-                                            <p className="text-xs font-bold text-foreground mb-4 flex items-center gap-2"><Ruler className="w-4 h-4 text-emerald-400" /> Yolculuk Özet Analizi</p>
-                                            <ResponsiveContainer width="100%" height={200}>
-                                                <PieChart>
-                                                    <Pie
-                                                        data={costBreakdown}
-                                                        cx="50%"
-                                                        cy="50%"
-                                                        innerRadius={60}
-                                                        outerRadius={80}
-                                                        paddingAngle={5}
-                                                        dataKey="value"
-                                                    >
-                                                        {costBreakdown.map((entry, index) => (
-                                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                                        ))}
-                                                    </Pie>
-                                                    <Tooltip
-                                                        contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }}
-                                                        itemStyle={{ color: "#fff" }}
-                                                        formatter={(value: number, name: string) => name === "Otoyol Ücreti" ? `₺${value}` : `${(value / 10).toFixed(1)} km`}
-                                                    />
-                                                    <Legend verticalAlign="bottom" height={36} />
-                                                </PieChart>
                                             </ResponsiveContainer>
                                         </div>
                                     </div>
